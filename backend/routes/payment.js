@@ -34,11 +34,16 @@ router.post("/create-payment", auth, async (req, res) => {
 
     const signedToken = jwt.sign(payload, process.env.PAYMENT_API_KEY);
 
+    // const response = await axios.post(
+    //   "https://payment-gateway-url/create-collect-request",
+    //   payload,
+    //   { headers: { Authorization: `Bearer ${signedToken}` } }
+    // );
     const response = await axios.post(
-      "https://payment-gateway-url/create-collect-request",
-      payload,
-      { headers: { Authorization: `Bearer ${signedToken}` } }
-    );
+  "https://staging-payments.edviron.com/api/v1/payment/collect",  
+  payload,
+  { headers: { Authorization: `Bearer ${signedToken}`, "Content-Type": "application/json" } }
+);
 
     res.json({
       redirect_url: response.data.redirect_url,
